@@ -1,28 +1,21 @@
-from ..llm import get_openai_client, get_gemini_client
+from ..llm import LLMClient
 from logging import getLogger
 
 logger = getLogger(__name__)
 
 
 class TaskPlanner:
-    def __init__(self):
+    def __init__(self, agent: str = "gemini"):
         """
         Initialize Task Planner.
         """
-        self.llm_client = get_gemini_client()
+        self.llm_client = LLMClient(agent)
         logger.info("Task Planner initialized")
 
     def plan_steps(self, task_description: str) -> str:
-        # response = self.llm_client.responses.create(
-        #     model="gpt-4.1",
-        #     instructions="Based on the following task description, create detailed steps to complete the task. Return"
-        #                  "the steps as a list.",
-        #     input=task_description
-        # )
-
-        response = self.llm_client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=f"Very briefly describe some steps to complete the following task: ${task_description}. "
-                     f"Return the steps as a list."
+        response = self.llm_client.generate(
+            prompt=f"Very briefly describe some steps to complete the following task: ${task_description}. "
+                     f"Return the steps as a list.",
+            model="gemini-2.5-flash"
         )
-        return response.text
+        return response
