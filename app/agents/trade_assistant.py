@@ -4,18 +4,18 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 
-class TaskPlanner:
+class TradeAssistant:
     def __init__(self, agent: str = "gemini"):
         """
-        Initialize Task Planner.
+        Initialize Trade Assistant.
         """
         self.llm_client = LLMClient(agent)
         logger.info("Task Planner initialized")
 
-    def plan_steps(self, task_description: str, model: str) -> str:
+    def create_strategy(self, description: str, instrument: str, model: str) -> str:
         response = self.llm_client.generate(
-            prompt=f"Very briefly describe some steps to complete the following task: ${task_description}. "
-                     f"Return the steps as a list.",
+            prompt=f"Create a brief trading strategy for ${instrument} based on the following "
+                   f"description: ${description}.",
             model=model
         )
         return response
